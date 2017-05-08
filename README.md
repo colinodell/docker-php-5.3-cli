@@ -1,7 +1,7 @@
 # docker-php-5.3-cli
 Build of 5.3 in the same style as the official PHP repository
 
-Available on [Docker Hub](https://hub.docker.com/r/tomsowerby/php-5.3/)
+Available on [Docker Hub](https://hub.docker.com/r/colinodell/php-5.3/)
 
 We have some legacy projects that need to be build in an old PHP 5.3 environment.
 
@@ -22,4 +22,4 @@ Run a script:
 	docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp tomsowerby/php-5.3:cli php your-script.php
 
 
-Please report bugs for this container to the [GitHub issue](https://github.com/tomsowerby/docker-php-5.3-cli/issues) page.
+Please report bugs for this container to the [GitHub issue](https://github.com/colinodell/docker-php-5.3-cli/issues) page.
