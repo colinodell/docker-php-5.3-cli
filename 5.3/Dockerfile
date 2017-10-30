@@ -71,10 +71,10 @@ RUN set -xe; \
 			gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 		done; \
 		gpg --batch --verify php.tar.xz.asc php.tar.xz; \
-		rm -r "$GNUPGHOME"; \
+		rm -rf "$GNUPGHOME"; \
 	fi; \
 	\
-	apt-get purge -y --auto-remove $fetchDeps
+	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $fetchDeps
 
 COPY docker-php-source /usr/local/bin/
 
@@ -117,6 +117,8 @@ RUN set -xe \
 		\
 		--disable-cgi \
 		\
+# --enable-ftp is included here because ftp_ssl_connect() needs ftp to be compiled statically (see https://github.com/docker-library/php/issues/236)
+		--enable-ftp \
 # --enable-mbstring is included here because otherwise there's no way to get pecl to use it properly (see https://github.com/docker-library/php/issues/195)
 		--enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
@@ -134,9 +136,14 @@ RUN set -xe \
 	&& make install \
 	&& { find /usr/local/bin /usr/local/sbin -type f -executable -exec strip --strip-all '{}' + || true; } \
 	&& make clean \
+	&& cd / \
 	&& docker-php-source delete \
 	\
-        && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
+	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps \
+	\
+# https://github.com/docker-library/php/issues/443
+	&& pecl update-channels \
+	&& rm -rf /tmp/pear ~/.pearrc
 
 COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
