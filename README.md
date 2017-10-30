@@ -15,11 +15,11 @@ Usage should be the same as the [Official PHP cli](https://hub.docker.com/_/php/
 
 Check the version:
 
-	docker run -it --rm tomsowerby/php-5.3:cli php -v
+	docker run -it --rm colinodell/php-5.3 php -v
 
 Run a script:
 
-	docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp tomsowerby/php-5.3:cli php your-script.php
+	docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp colinodell/php-5.3 php your-script.php
 
 
 Please report bugs for this container to the [GitHub issue](https://github.com/colinodell/docker-php-5.3-cli/issues) page.
